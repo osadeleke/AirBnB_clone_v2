@@ -48,3 +48,17 @@ class FileStorage:
                         self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
+
+    def delete(self, obj=None):
+        """Method to delete obj from __objects if it’s inside"""
+        if obj is not None:
+            obj_cls = str(obj).split(" ")[0]
+            obj_cls = obj_cls[1:-1]
+            key = obj_cls + "." + obj.id
+            if key in FileStorage.__objects:
+                del(self.all()[key])
+                self.save()
+
+    def close(self):
+        """ call reload() method for deserializing the JSON file to objects"""
+        reload()
